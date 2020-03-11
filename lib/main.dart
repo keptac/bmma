@@ -1,7 +1,7 @@
 import 'package:bmma/Settings.dart';
 import 'package:bmma/HomeScreen.dart';
+import 'package:bmma/dummy.dart';
 import 'package:flutter/material.dart';
-
 
 void main() => runApp(MyApp());
 
@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BMMA',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

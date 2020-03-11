@@ -15,6 +15,15 @@ class _ExchangeRateState extends State<ExchangeRate> {
   bool _zwlEnable = true;
   bool _usdEnable = true;
 
+  List<Map<dynamic, Object>> rates = [
+    {'source': 'zimrates', 'rate': 52},
+    {'source': 'zimrates', 'rate': 39.5},
+    {'source': 'zimrates', 'rate': 38.7},
+    {'source': 'zimrates', 'rate': 38.5},
+    {'source': 'rbz.co.zw', 'rate': 18.26},
+    {'source': 'bond', 'rate': 28.8},
+  ];
+
   void _clear() {
     setState(() {
       _zwlController.clear();
@@ -30,7 +39,8 @@ class _ExchangeRateState extends State<ExchangeRate> {
       if (_zwlController.text.isNotEmpty && _usdController.text.isEmpty) {
         _zwlVal = double.parse(_zwlController.text);
         _result = _zwlVal / _currentRate;
-      } else if (_usdController.text.isNotEmpty &&  _zwlController.text.isEmpty) {
+      } else if (_usdController.text.isNotEmpty &&
+          _zwlController.text.isEmpty) {
         _usdValue = double.parse(_usdController.text);
         _result = _usdValue * _currentRate;
       } else {
@@ -158,7 +168,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Text(
-                                          "\$38.00",
+                                          "\$ " + rates[index].toString(),
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w700,
@@ -171,7 +181,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                               );
                             },
                             shrinkWrap: true,
-                            itemCount: 2,
+                            itemCount: rates.length,
                             padding: EdgeInsets.all(0),
                             controller:
                                 ScrollController(keepScrollOffset: false),
@@ -179,10 +189,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
                           Divider(
                             thickness: 10,
                           ),
-
-
-
-
                           Container(
                             margin: EdgeInsets.only(top: 10),
                             child: Column(
@@ -324,8 +330,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
                               ],
                             ),
                           )
-
-                          
                         ],
                       ),
                       controller: scrollController,

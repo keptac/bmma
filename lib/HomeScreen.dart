@@ -1,17 +1,87 @@
 import 'package:bmma/ExchangeRate.dart';
 import 'package:bmma/ProfitCalculator.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreen createState() => _HomeScreen();
+  final Widget child;
+
+  HomeScreen({Key key, this.child}) : super(key: key);
+
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreen extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
+  List<charts.Series<Sales, int>> _seriesLineData;
+
+  _generateData() {
+    var linesalesdata = [
+      new Sales(0, 45),
+      new Sales(1, 56),
+      new Sales(2, 55),
+      new Sales(3, 60),
+      new Sales(4, 61),
+      new Sales(5, 70),
+    ];
+    var linesalesdata1 = [
+      new Sales(0, 35),
+      new Sales(1, 46),
+      new Sales(2, 45),
+      new Sales(3, 50),
+      new Sales(4, 51),
+      new Sales(5, 60),
+    ];
+
+    var linesalesdata2 = [
+      new Sales(0, 20),
+      new Sales(1, 24),
+      new Sales(2, 25),
+      new Sales(3, 40),
+      new Sales(4, 45),
+      new Sales(5, 60),
+    ];
+
+    _seriesLineData.add(
+      charts.Series(
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),
+        id: 'Air Pollution',
+        data: linesalesdata,
+        domainFn: (Sales sales, _) => sales.yearval,
+        measureFn: (Sales sales, _) => sales.salesval,
+      ),
+    );
+    _seriesLineData.add(
+      charts.Series(
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),
+        id: 'Air Pollution',
+        data: linesalesdata1,
+        domainFn: (Sales sales, _) => sales.yearval,
+        measureFn: (Sales sales, _) => sales.salesval,
+      ),
+    );
+    _seriesLineData.add(
+      charts.Series(
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),
+        id: 'Air Pollution',
+        data: linesalesdata2,
+        domainFn: (Sales sales, _) => sales.yearval,
+        measureFn: (Sales sales, _) => sales.salesval,
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _seriesLineData = List<charts.Series<Sales, int>>();
+    _generateData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      // height: MediaQuery.of(context).size.height,
       width: double.infinity,
       child: Stack(
         children: <Widget>[
@@ -189,351 +259,69 @@ class _HomeScreen extends State<HomeScreen> {
               ],
             ),
           ),
-
-          //draggable sheet
-          DraggableScrollableSheet(
-            builder: (context, scrollController) {
-              return Container(
-                decoration: BoxDecoration(
-                    color: Color.fromRGBO(243, 245, 248, 1),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 34,
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Transactions Overview",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 18,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              "See all",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Colors.grey[800]),
-                            )
-                          ],
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 32),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-
-                      //Container for buttons
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 32),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              child: Text(
-                                "All",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14,
-                                    color: Colors.grey[900]),
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey[200],
-                                        blurRadius: 10.0,
-                                        spreadRadius: 4.5)
-                                  ]),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Container(
-                              child: Row(
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 8,
-                                    backgroundColor: Colors.green,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    "Income",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14,
-                                        color: Colors.grey[900]),
-                                  ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey[200],
-                                        blurRadius: 10.0,
-                                        spreadRadius: 4.5)
-                                  ]),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Container(
-                              child: Row(
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 8,
-                                    backgroundColor: Colors.orange,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    "Expenses",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14,
-                                        color: Colors.grey[900]),
-                                  ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey[200],
-                                        blurRadius: 10.0,
-                                        spreadRadius: 4.5)
-                                  ]),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            )
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 16,
-                      ),
-                      //Container Listview for expenses and incomes
-                      Container(
-                        child: Text(
-                          "TODAY",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey[500]),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 32),
-                      ),
-
-                      SizedBox(
-                        height: 16,
-                      ),
-
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 32),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(18))),
-                                  child: Icon(
-                                    Icons.date_range,
-                                    color: Colors.lightBlue[900],
-                                  ),
-                                  padding: EdgeInsets.all(12),
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        "Payment",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.grey[900]),
-                                      ),
-                                      Text(
-                                        "Payment from Saad",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.grey[500]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Text(
-                                      "+\$500.5",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.lightGreen),
-                                    ),
-                                    Text(
-                                      "26 Jan",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.grey[500]),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        shrinkWrap: true,
-                        itemCount: 2,
-                        padding: EdgeInsets.all(0),
-                        controller: ScrollController(keepScrollOffset: false),
-                      ),
-
-                      //now expense
-                      SizedBox(
-                        height: 16,
-                      ),
-
-                      Container(
-                        child: Text(
-                          "YESTERDAY",
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.grey[500]),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 32),
-                      ),
-
-                      SizedBox(
-                        height: 16,
-                      ),
-
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 32),
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[100],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(18))),
-                                  child: Icon(
-                                    Icons.directions_car,
-                                    color: Colors.lightBlue[900],
-                                  ),
-                                  padding: EdgeInsets.all(12),
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        "Petrol",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.grey[900]),
-                                      ),
-                                      Text(
-                                        "Payment to Supplier",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.grey[500]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Text(
-                                      "-\$500.5",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.orange),
-                                    ),
-                                    Text(
-                                      "26 Jan",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.grey[500]),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        shrinkWrap: true,
-                        itemCount: 1,
-                        padding: EdgeInsets.only(bottom: 40),
-                        controller: ScrollController(keepScrollOffset: false),
-                      ),
-                    ],
-                  ),
-                  controller: scrollController,
+          Container(
+            margin: EdgeInsets.only(top: 200),
+            color: Colors.white,
+            child: Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 10),
+                    Text(
+                      'Rates for the Last 7 days',
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: charts.LineChart(_seriesLineData,
+                          defaultRenderer: new charts.LineRendererConfig(
+                              includeArea: true, stacked: true),
+                          animate: true,
+                          animationDuration: Duration(seconds: 5),
+                          behaviors: [
+                            new charts.ChartTitle('Days',
+                                behaviorPosition:
+                                    charts.BehaviorPosition.bottom,
+                                titleOutsideJustification:
+                                    charts.OutsideJustification.middleDrawArea),
+                            new charts.ChartTitle('Rate',
+                                behaviorPosition: charts.BehaviorPosition.start,
+                                titleOutsideJustification:
+                                    charts.OutsideJustification.middleDrawArea),
+                          ]),
+                    ),
+                  ],
                 ),
-              );
-            },
-            initialChildSize: 0.65,
-            minChildSize: 0.65,
-            maxChildSize: 0.65,
-          )
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+class Pollution {
+  String place;
+  int year;
+  int quantity;
+
+  Pollution(this.year, this.place, this.quantity);
+}
+
+class Task {
+  String task;
+  double taskvalue;
+  Color colorval;
+
+  Task(this.task, this.taskvalue, this.colorval);
+}
+
+class Sales {
+  int yearval;
+  int salesval;
+
+  Sales(this.yearval, this.salesval);
 }
