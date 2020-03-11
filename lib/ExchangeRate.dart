@@ -14,15 +14,15 @@ class _ExchangeRateState extends State<ExchangeRate> {
   double _usdValue = 0.0;
   bool _zwlEnable = true;
   bool _usdEnable = true;
-
-  List<Map<dynamic, Object>> rates = [
-    {'source': 'zimrates', 'rate': 52},
-    {'source': 'zimrates', 'rate': 39.5},
-    {'source': 'zimrates', 'rate': 38.7},
-    {'source': 'zimrates', 'rate': 38.5},
-    {'source': 'rbz.co.zw', 'rate': 18.26},
-    {'source': 'bond', 'rate': 28.8},
-  ];
+  var rates = [52, 39.5, 38.7, 38.5, 18.26, 28.8];
+  // var rates = [
+  //   {'source': 'zimrates', 'rate': 52},
+  //   {'source': 'zimrates', 'rate': 39.5},
+  //   {'source': 'zimrates', 'rate': 38.7},
+  //   {'source': 'zimrates', 'rate': 38.5},
+  //   {'source': 'rbz.co.zw', 'rate': 18.26},
+  //   {'source': 'bond', 'rate': 28.8},
+  // ];
 
   void _clear() {
     setState(() {
@@ -100,7 +100,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: 34,
+                            height: 14,
                           ),
                           Container(
                             child: Text(
@@ -115,86 +115,89 @@ class _ExchangeRateState extends State<ExchangeRate> {
                           SizedBox(
                             height: 16,
                           ),
-                          ListView.builder(
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(
-                                    right: 32, left: 32, bottom: 10),
-                                padding: EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[100],
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(18))),
-                                      child: Icon(
-                                        Icons.date_range,
-                                        color: Colors.lightBlue[900],
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(
+                                      right: 32, left: 32, bottom: 10),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(18))),
+                                        child: Icon(
+                                          Icons.date_range,
+                                          color: Colors.lightBlue[900],
+                                        ),
+                                        padding: EdgeInsets.all(10),
                                       ),
-                                      padding: EdgeInsets.all(12),
-                                    ),
-                                    SizedBox(
-                                      width: 16,
-                                    ),
-                                    Expanded(
-                                      child: Column(
+                                      SizedBox(
+                                        width: 16,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              "USD/ZWL\$",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.grey[900]),
+                                            ),
+                                            Text(
+                                              "zimrates.com",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.grey[500]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.end,
                                         children: <Widget>[
                                           Text(
-                                            "USD/ZWL\$",
+                                            "\$ " + rates[index].toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,
-                                                color: Colors.grey[900]),
-                                          ),
-                                          Text(
-                                            "zimrates.com",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.grey[500]),
+                                                color: Colors.lightGreen),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          "\$ " + rates[index].toString(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.lightGreen),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            shrinkWrap: true,
-                            itemCount: rates.length,
-                            padding: EdgeInsets.all(0),
-                            controller:
-                                ScrollController(keepScrollOffset: false),
+                                    ],
+                                  ),
+                                );
+                              },
+                              shrinkWrap: true,
+                              itemCount: rates.length,
+                              padding: EdgeInsets.all(0),
+                              controller:
+                                  ScrollController(keepScrollOffset: false),
+                            ),
                           ),
                           Divider(
                             thickness: 10,
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 10),
                             child: Column(
                               children: <Widget>[
                                 Container(
-                                  margin: EdgeInsets.all(20),
+                                  margin: EdgeInsets.only(
+                                      top: 10, left: 20, right: 20, bottom: 10),
                                   child: Text(
                                     '$_result',
                                     style: TextStyle(
@@ -208,7 +211,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                                   child: Row(
                                     children: <Widget>[
                                       SizedBox(
-                                        height: 70,
+                                        height: 60,
                                         width: 180,
                                         child: TextField(
                                           controller: _usdController,
@@ -252,7 +255,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                                         width: 10.0,
                                       ),
                                       SizedBox(
-                                        height: 70,
+                                        height: 60,
                                         width: 180,
                                         child: TextField(
                                           controller: _zwlController,
