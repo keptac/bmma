@@ -1,6 +1,5 @@
 import 'package:bmma/Settings.dart';
 import 'package:bmma/HomeScreen.dart';
-import 'package:bmma/dummy.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -57,12 +56,12 @@ class _WalletAppState extends State<WalletApp> {
         showUnselectedLabels: true,
         iconSize: 30,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        elevation: 0,
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   elevation: 0,
+      //   child: Icon(Icons.add),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: screens[selectedTab],
     );
   }

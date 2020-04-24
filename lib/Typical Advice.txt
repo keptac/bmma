@@ -1,0 +1,18 @@
+Typical Advice
+
+Did you know? HI Kelvin did you know that ...
+
+If i horded using USD:
+
+Hi Kelvin, i have been studying the ZWL - USD rate for you, it seems to be rising contanstly weekly at this {rate}.
+Since you horded using USD it would be advisable to sell your product in USD, if however you decide to sell in ZWL,
+you will have increase your weekly sales or review the prices weekly.
+
+Greetings Again Kelvin.  I have some insights for you, if you decide to sell your product at ZWL price there are x% chances that you will get y% profit which is
+z% decrease or increase to your target profit value. I would advice you sell fast or sell in USD.
+
+
+Variables - Later Backend
+- Rate % increase or decrease. predict the likelihood of increase. Last week rates average, this week rate average.
+- Advices for increase
+- Advices for decreases

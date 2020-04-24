@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProfitCalculator extends StatefulWidget {
   @override
@@ -8,19 +9,33 @@ class ProfitCalculator extends StatefulWidget {
 class _ProfitCalculatorState extends State<ProfitCalculator> {
   final _profitController = TextEditingController();
   final _costPriceController = TextEditingController();
+  final _quantityController = TextEditingController();
   double _profit = 0.0;
   double _costPrice = 0.0;
   double _sellingPrice = 0.0;
   double _sellingPriceUsd = 0.0;
-  double _averageRate = 1.0;
+  double _averageRate = 2.0;
+  String currency = 'ZWL';
+  int _quantity = 1;
 
   void _calculateSellingPrice() {
     if (_costPriceController.text.isNotEmpty &&
-        _profitController.text.isNotEmpty) {
+        _profitController.text.isNotEmpty &&
+        _quantityController.text.isNotEmpty) {
+      _quantity = int.parse(_quantityController.text);
+      if (_quantity == 0) {
+        _quantity = 1;
+      }
       _profit = double.parse(_profitController.text);
-      _costPrice = double.parse(_costPriceController.text);
+      _costPrice = double.parse(_costPriceController.text) / _quantity;
       _sellingPrice = (100 + _profit) * (_costPrice / 100);
-      _sellingPriceUsd = _sellingPrice / _averageRate;
+
+      if (currency == "ZWL") {
+        _sellingPriceUsd = _sellingPrice / _averageRate;
+      } else if (currency == "USD") {
+        _sellingPriceUsd = _sellingPrice;
+        _sellingPrice = _sellingPriceUsd * _averageRate;
+      }
     } else {}
   }
 
@@ -28,6 +43,8 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
     setState(() {
       _profitController.clear();
       _costPriceController.clear();
+      _quantityController.clear();
+      _quantity = 1;
       _profit = 0.0;
       _sellingPrice = 0.0;
       _costPrice = 0.0;
@@ -52,14 +69,84 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.18,
                 child: Container(
-                  // color: Colors.orange,
-                  //put image
-                  child: Center(
-                    child: Text('Determine Your Selling Price',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        )),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('images/finance+background.jpg'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color.fromRGBO(0, 0, 50, 0.9),
+                                Color.fromRGBO(0, 0, 50, 0.7),
+                              ]),
+                        ),
+                      ),
+                      Positioned(
+                        top: 20,
+                        left: 20,
+                        right: 20,
+                        child: Center(
+                          child: Text(
+                            'Sell at (USD $_sellingPriceUsd = ZWL $_sellingPrice) each',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 50,
+                        left: 20,
+                        right: 20,
+                        child: Center(
+                          child: Text(
+                            'Profit: $_profit%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 15,
+                        bottom: 10,
+                        child: Text(
+                          DateFormat('dd-MM-yyyy')
+                              .format(DateTime.now())
+                              .toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 15,
+                        bottom: 10,
+                        child: Text(
+                          'USD 1 = ZWL $_averageRate',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -69,73 +156,73 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                 builder: (context, scrollController) {
                   return Container(
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(243, 245, 248, 1),
+                        color: Color.fromRGBO(243, 235, 248, 1),
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0))),
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5))),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
+                          Card(
+                            margin:
+                                EdgeInsets.only(top: 20, left: 10, right: 10),
                             child: Column(
                               children: <Widget>[
-                                Card(
-                                  margin: EdgeInsets.only(
-                                      left: 10, right: 10, bottom: 30, top: 10),
-                                  child: Container(
-                                    padding: EdgeInsets.all(10.0),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          'Your must sell at: ',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              // fontWeight: FontWeight.w400,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          'ZWL $_sellingPrice = USD $_sellingPriceUsd',
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                SizedBox(
+                                  height: 15,
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
                                   child: Row(
                                     children: <Widget>[
                                       SizedBox(
-                                        height: 70,
-                                        width: 230,
+                                        height: 40,
+                                        width: 70,
+                                        child: DropdownButton<String>(
+                                          value: currency,
+                                          icon: Icon(Icons.arrow_downward),
+                                          iconSize: 20,
+                                          elevation: 16,
+                                          style: TextStyle(
+                                              color: Colors.blue[900]),
+                                          underline: Container(
+                                            height: 2,
+                                            color: Colors.blue[900],
+                                          ),
+                                          onChanged: (String newValue) {
+                                            setState(() {
+                                              currency = newValue;
+                                              _calculateSellingPrice();
+                                            });
+                                          },
+                                          items: <String>['ZWL', 'USD']
+                                              .map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      SizedBox(
+                                        height: 60,
+                                        width: 150,
                                         child: TextField(
                                           maxLength: 10000,
                                           controller: _costPriceController,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.attach_money,
-                                              color: Colors.blue[900],
-                                              size: 20,
-                                            ),
-                                            labelText: 'Cost Per Unit',
-                                            prefixText: 'ZWL ',
+                                            labelText: 'Buying Price',
+                                            prefixText: '$currency ',
                                             labelStyle: TextStyle(
                                                 color: Colors.blue[900]),
                                             enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                const Radius.circular(20.0),
+                                                const Radius.circular(5.0),
                                               ),
                                               borderSide: BorderSide(
                                                 color: Colors.blue[900],
@@ -144,7 +231,7 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                const Radius.circular(20.0),
+                                                const Radius.circular(10.0),
                                               ),
                                               borderSide: BorderSide(
                                                 color: Colors.blue[900],
@@ -157,25 +244,20 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                         width: 10.0,
                                       ),
                                       SizedBox(
-                                        height: 70,
+                                        height: 60,
                                         width: 130,
                                         child: TextField(
-                                          maxLength: 2,
-                                          controller: _profitController,
+                                          maxLength: 5,
+                                          controller: _quantityController,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              Icons.attach_money,
-                                              color: Colors.blue[900],
-                                              size: 20,
-                                            ),
-                                            labelText: '% Profit',
+                                            labelText: 'Quantity',
                                             labelStyle: TextStyle(
                                                 color: Colors.blue[900]),
                                             enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                const Radius.circular(20.0),
+                                                const Radius.circular(5.0),
                                               ),
                                               borderSide: BorderSide(
                                                 color: Colors.blue[900],
@@ -184,7 +266,7 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                const Radius.circular(20.0),
+                                                const Radius.circular(10.0),
                                               ),
                                               borderSide: BorderSide(
                                                 color: Colors.blue[900],
@@ -196,24 +278,81 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 70,
+                                        width: 230,
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.only(left: 5, top: 20),
+                                          child: Text(
+                                            'Expected Profit :',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 60,
+                                        width: 140,
+                                        child: TextField(
+                                          maxLength: 4,
+                                          controller: _profitController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            labelText: '% Profit',
+                                            labelStyle: TextStyle(
+                                                color: Colors.blue[900]),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                const Radius.circular(5.0),
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: Colors.blue[900],
+                                              ),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                const Radius.circular(10.0),
+                                              ),
+                                              borderSide: BorderSide(
+                                                color: Colors.blue[900],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 5),
                                 Row(
                                   children: <Widget>[
                                     Container(
-                                      margin: EdgeInsets.only(left: 100.0),
+                                      margin: EdgeInsets.only(left: 80.0),
                                       child: RaisedButton(
                                         elevation: 5,
                                         padding: EdgeInsets.only(
                                             top: 10,
                                             bottom: 10,
-                                            left: 10,
-                                            right: 10),
+                                            left: 30,
+                                            right: 30),
                                         onPressed: _calculateSellingPrice,
                                         color: Colors.blue[900],
                                         child: Text(
                                           "Calculate",
                                           style: TextStyle(
                                             color: Colors.white,
+                                            fontWeight: FontWeight.w300,
                                             fontSize: 18.0,
                                           ),
                                         ),
@@ -240,8 +379,58 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                     )
                                   ],
                                 ),
+                                SizedBox(
+                                  height: 15,
+                                )
                               ],
                             ),
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(top: 15, left: 20, right: 20),
+                            child: Stack(
+                              children: <Widget>[
+                                Card(
+                                  elevation: 30,
+                                  margin: EdgeInsets.only(left: 20, top: 20),
+                                  color: Colors.white,
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.28,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    child: Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Center(
+                                        child: Text(
+                                          '''Hi Sammy M
+
+I have been studying the ZWL - USD rate for you, it seems to be rising contanstly weekly at this {rate}. Since you horded using USD it would be advisable to sell your product in USD, if however you decide to sell in ZWL, you will have increase your weekly sales or review the prices weekly.''',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.blue[900],
+                                    radius: 35,
+                                    child: Icon(
+                                      Icons.info,
+                                      size: 40,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 15,
                           )
                         ],
                       ),
