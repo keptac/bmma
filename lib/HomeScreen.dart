@@ -1,5 +1,6 @@
 import 'package:bmma/ExchangeRate.dart';
 import 'package:bmma/ProfitCalculator.dart';
+import 'package:bmma/inventory/adminhome.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,18 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             width: 16,
                           ),
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.blue[900],
-                            child: ClipOval(
-                              child: Image.asset(
-                                "assets/dp.png",
-                                height: 30,
-                                width: 30,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     )
@@ -157,14 +146,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: <Widget>[
                           InkWell(
-                            onTap: () => {
-                              Navigator.push(
+                            onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ProfitCalculator(),
-                                ),
-                              )
-                            },
+                                  builder: (context) => Admin(),
+                                )),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Color.fromRGBO(243, 245, 248, 1),

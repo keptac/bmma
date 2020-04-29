@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "542845589552",
+    "firebase_url": "https://bmma-d6d69.firebaseio.com",
+    "project_id": "bmma-d6d69",
+    "storage_bucket": "bmma-d6d69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542845589552:android:ca8670186716cf829df5f5",
+        "android_client_info": {
+          "package_name": "com.example.bmma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542845589552-p7bg5c1dv9sf9f1h8odd8qht2sb08jgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDswD56vv4Hg5yPNWGBPQTrXCtwvskn8ks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542845589552-p7bg5c1dv9sf9f1h8odd8qht2sb08jgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -79,7 +79,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
       new RatesScale(6, 30.8),
       new RatesScale(7, 29.7),
     ];
-    var rbz = [                     
+    var rbz = [
       new RatesScale(1, 18.26),
       new RatesScale(2, 18.26),
       new RatesScale(3, 19.05),
@@ -101,7 +101,8 @@ class _ExchangeRateState extends State<ExchangeRate> {
 
     _seriesLineData.add(
       charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff990099)),        //bank purple
+        colorFn: (__, _) =>
+            charts.ColorUtil.fromDartColor(Color(0xff990099)), //bank purple
         id: 'Bank Rate',
         data: rbz,
         domainFn: (RatesScale ratesScale, _) => ratesScale.dayInterval,
@@ -110,7 +111,8 @@ class _ExchangeRateState extends State<ExchangeRate> {
     );
     _seriesLineData.add(
       charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xff109618)),      // RTGS Rate Grees
+        colorFn: (__, _) => charts.ColorUtil.fromDartColor(
+            Color(0xff109618)), // RTGS Rate Grees
         id: 'RTGS Rate',
         data: informalMarket,
         domainFn: (RatesScale ratesScale, _) => ratesScale.dayInterval,
@@ -119,7 +121,8 @@ class _ExchangeRateState extends State<ExchangeRate> {
     );
     _seriesLineData.add(
       charts.Series(
-        colorFn: (__, _) => charts.ColorUtil.fromDartColor(Color(0xffff9900)),      //bondRate Orange
+        colorFn: (__, _) =>
+            charts.ColorUtil.fromDartColor(Color(0xffff9900)), //bondRate Orange
         id: 'Bond Rate',
         data: bondRate,
         domainFn: (RatesScale ratesScale, _) => ratesScale.dayInterval,
@@ -137,21 +140,42 @@ class _ExchangeRateState extends State<ExchangeRate> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.18,
             child: Container(
-              child: Center(
-                child: Text(
-                  DateFormat('yyyy-MM-dd – kk:mm')
-                          .format(DateTime.now())
-                          .toString() +
-                      '\nExchange Rates ' +
-                      title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
+                child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/background.jpg'),
+                        fit: BoxFit.fitWidth),
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Color.fromRGBO(0, 0, 50, 0.9),
+                          Color.fromRGBO(0, 0, 50, 0.7),
+                        ]),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    DateFormat('yyyy-MM-dd – kk:mm')
+                            .format(DateTime.now())
+                            .toString() +
+                        '\nExchange Rates ' +
+                        title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            )),
           ),
           widg
         ],
