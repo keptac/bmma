@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 class CurrencyConvertor extends StatefulWidget {
   @override
@@ -10,12 +11,12 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
   final _zwlController = TextEditingController();
   final _usdController = TextEditingController();
   double _result = 0.0;
-  double _currentRate = 34.5;
+  double _currentRate = 83.5;
   double _zwlVal = 0.0;
   double _usdValue = 0.0;
   bool _zwlEnable = true;
   bool _usdEnable = true;
-  var rates = [52, 39.5, 38.7, 38.5, 18.26, 28.8];
+  var rates = [85.20, 82.00, 25.00, 58.40];
 
   bool connected;
 
@@ -24,22 +25,17 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
-          connected = true;
+          connected = false;
         });
-        print('connected');
       }
     } on SocketException catch (_) {
       setState(() {
         connected = false;
       });
-
-      print('not connected');
     }
   }
 
-
-
-@override
+  @override
   void initState() {
     super.initState();
     _checkConnectivity();
@@ -109,17 +105,18 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.attach_money,
-                        color: Colors.blue[900],
+                        color: Color.fromRGBO(0, 128, 128, 1),
                         size: 20,
                       ),
                       labelText: 'USD',
-                      labelStyle: TextStyle(color: Colors.blue[900]),
+                      labelStyle:
+                          TextStyle(color: Color.fromRGBO(0, 128, 128, 1)),
                       enabledBorder: new OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
                           const Radius.circular(20.0),
                         ),
                         borderSide: new BorderSide(
-                          color: Colors.blue[900],
+                          color: Color.fromRGBO(0, 128, 128, 1),
                         ),
                       ),
                       focusedBorder: new OutlineInputBorder(
@@ -127,7 +124,7 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
                           const Radius.circular(20.0),
                         ),
                         borderSide: new BorderSide(
-                          color: Colors.blue[900],
+                          color: Color.fromRGBO(0, 128, 128, 1),
                         ),
                       ),
                     ),
@@ -148,17 +145,18 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(
                         Icons.attach_money,
-                        color: Colors.blue[900],
+                        color: Color.fromRGBO(0, 128, 128, 1),
                         size: 20,
                       ),
                       labelText: 'ZWL',
-                      labelStyle: TextStyle(color: Colors.blue[900]),
+                      labelStyle:
+                          TextStyle(color: Color.fromRGBO(0, 128, 128, 1)),
                       enabledBorder: new OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
                           const Radius.circular(20.0),
                         ),
                         borderSide: new BorderSide(
-                          color: Colors.blue[900],
+                          color: Color.fromRGBO(0, 128, 128, 1),
                         ),
                       ),
                       focusedBorder: new OutlineInputBorder(
@@ -166,7 +164,7 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
                           const Radius.circular(20.0),
                         ),
                         borderSide: new BorderSide(
-                          color: Colors.blue[900],
+                          color: Color.fromRGBO(0, 128, 128, 1),
                         ),
                       ),
                     ),
@@ -178,13 +176,14 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
               ],
             ),
           ),
+          SizedBox(height: 25.0),
           Row(
             children: <Widget>[
               Container(
                 margin: EdgeInsets.only(left: 100.0),
                 child: RaisedButton(
                   onPressed: _currencyConvertor,
-                  color: Colors.blue[900],
+                  color: Color.fromRGBO(0, 128, 128, 1),
                   child: Text(
                     "Calculate",
                     style: TextStyle(
@@ -219,7 +218,7 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Color.fromRGBO(0, 128, 128, 1),
           title: Text('BMMA Rates'),
           centerTitle: true,
         ),
@@ -232,14 +231,41 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.18,
                 child: Container(
-                  child: Center(
-                    child: Text('Currency Convetor Chat',
+                    child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/background.jpg'),
+                            fit: BoxFit.fitWidth),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Color.fromRGBO(0, 0, 50, 0.9),
+                              Color.fromRGBO(0, 0, 50, 0.7),
+                            ]),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        DateFormat('yyyy-MM-dd – kk:mm')
+                                .format(DateTime.now())
+                                .toString() +
+                            '\nCurrency Convetor Chat',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
-                        )),
-                  ),
-                ),
+                          fontSize: 18,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                )),
               ),
               DraggableScrollableSheet(
                 builder: (context, scrollController) {
@@ -258,7 +284,8 @@ class _ExchangeRateState extends State<CurrencyConvertor> {
                           ),
                           connected
                               ? Center(
-                                  child: Text('Connected: Create Chat Screen'))
+                                  child: Text('Connected: Create Chat Screen'),
+                                )
                               : convertorGeneric()
                         ],
                       ),

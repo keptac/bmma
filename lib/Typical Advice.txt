@@ -16,3 +16,105 @@ Variables - Later Backend
 - Rate % increase or decrease. predict the likelihood of increase. Last week rates average, this week rate average.
 - Advices for increase
 - Advices for decreases
+
+
+----------------------------------------------------------- TODOS --------------------------------------------------------------------------------------------
+
+1. Create intelligent chat screen for rates
+
+2. Calculate average rate to use
+
+3. Upload rates to firebase
+
+4. Simple analysis of rate trends
+
+5. Redesign front page
+
+
+get rate Black Market,
+Bank Rate
+
+USD / ZWL$ 92 (zimrates.com)
+USD / ZWL$ 25 (interbank)
+USD / BOND 58.4 (zimrates.com)
+USD / ZWL$ 82 (bluemari.info)
+
+
+
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
+
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+void main() async {
+
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'ratesDB.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        "CREATE TABLE rates(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)",
+      );
+    },
+    version: 1,
+  );
+
+  Future<void> insertRate(Rate rate) async {
+    final Database db = await database;
+
+    await db.insert(
+      'rates',
+      rate.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<Rate>> rates() async {
+    final Database db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('rates');
+
+    return List.generate(maps.length, (i) {
+      return Rate(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        age: maps[i]['age'],
+      );
+    });
+  }
+
+  var fido = Rate(
+    id: 0,
+    name: 'Fido',
+    age: 35,
+  );
+
+  await insertRate(fido);
+  print(await rates());
+}
+
+
+
+
+class Rate {
+  final int id;
+  final String name;
+  final int age;
+
+  Rate({this.id, this.name, this.age});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'age': age,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Rate{id: $id, name: $name, age: $age}';
+  }
+}
+

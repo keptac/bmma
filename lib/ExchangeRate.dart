@@ -18,42 +18,42 @@ class ExchangeRate extends StatefulWidget {
 
 Future<Rates> fetchRates() async {
   var rates = jsonEncode([
-    {"source": "OMIR", "rate": "52"},
-    {"source": "zimrates", "rate": "39.5"},
-    {"source": "zimrates", "rate": "38.7"},
-    {"source": "zimrates", "rate": "38.5"},
-    {"source": 'rbz.co.zw', "rate": "18.26"},
-    {"source": 'bond cash', "rate": "28.8"},
+    {"source": "Parallel Market ", "rate": "83.5"},
+    {"source": 'Interbank', "rate": "25.00"},
+    {"source": 'Cash', "rate": "58.40"},
   ]);
-//Should be from Server
+
+// Should be from Server or firebase
   final response =
       await http.get('https://jsonplaceholder.typicode.com/albums/1');
 
   if (response.statusCode == 200) {
-    // return Rates.fromJson(json.decode(response.body)); replace rates with response body
+    myModels =
+        (json.decode(rates) as List).map((i) => Rates.fromJson(i)).toList();
 
+    return Rates.fromJson(json.decode(rates)[0]);
+  } else {
     myModels =
         (json.decode(rates) as List).map((i) => Rates.fromJson(i)).toList();
     return Rates.fromJson(json.decode(rates)[0]);
-  } else {
-    throw Exception('Failed to load rates');
+    // throw Exception('Failed to load rates');
   }
 }
 
 class Rates {
+  final int id;
   final String source;
   final String rate;
+  final String date;
 
-  Rates({
-    this.source,
-    this.rate,
-  });
+  Rates({this.id, this.source, this.rate, this.date});
 
   factory Rates.fromJson(Map<String, dynamic> json) {
     return Rates(
-      source: json["source"],
-      rate: json["rate"],
-    );
+        id: json["id"],
+        source: json["source"],
+        rate: json["rate"],
+        date: json["date"]);
   }
 }
 
@@ -71,32 +71,27 @@ class _ExchangeRateState extends State<ExchangeRate> {
 
   _generateData() {
     var bondRate = [
-      new RatesScale(1, 28.6),
-      new RatesScale(2, 28.8),
-      new RatesScale(3, 28.1),
-      new RatesScale(4, 30),
-      new RatesScale(5, 30.5),
-      new RatesScale(6, 30.8),
-      new RatesScale(7, 29.7),
+      new RatesScale(0, 24.1),
+      new RatesScale(1, 28.1),
+      new RatesScale(2, 36.8),
+      new RatesScale(3, 51.8),
+      new RatesScale(4, 58.4)
     ];
+
     var rbz = [
-      new RatesScale(1, 18.26),
-      new RatesScale(2, 18.26),
-      new RatesScale(3, 19.05),
-      new RatesScale(4, 19.82),
-      new RatesScale(5, 19.90),
-      new RatesScale(6, 19.90),
-      new RatesScale(7, 19.21),
+      new RatesScale(0, 17.95),
+      new RatesScale(1, 25.00),
+      new RatesScale(2, 25.00),
+      new RatesScale(3, 25.00),
+      new RatesScale(4, 25.00)
     ];
 
     var informalMarket = [
-      new RatesScale(1, 38.5),
-      new RatesScale(2, 38.7),
-      new RatesScale(3, 39.5),
-      new RatesScale(4, 40.1),
-      new RatesScale(5, 40.1),
-      new RatesScale(6, 41),
-      new RatesScale(7, 41.4),
+      new RatesScale(0, 31.00),
+      new RatesScale(1, 38.50),
+      new RatesScale(2, 50.50),
+      new RatesScale(3, 71.00),
+      new RatesScale(4, 86.40)
     ];
 
     _seriesLineData.add(
@@ -183,12 +178,14 @@ class _ExchangeRateState extends State<ExchangeRate> {
     );
   }
 
+//Get rates from API
+
   Widget ratesWidget() {
     return DraggableScrollableSheet(
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-              color: Color.fromRGBO(243, 245, 248, 1),
+              color: Color.fromRGBO(243, 235, 248, 1),
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(0), topRight: Radius.circular(0))),
           child: SingleChildScrollView(
@@ -206,65 +203,68 @@ class _ExchangeRateState extends State<ExchangeRate> {
                       if (snapshot.hasData) {
                         return ListView.builder(
                           itemBuilder: (context, index) {
-                            return Container(
+                            return Card(
+                              elevation: 5.0,
                               margin: EdgeInsets.only(
                                   right: 32, left: 32, bottom: 10),
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              child: Row(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
+                              child: Container(
+                                padding: EdgeInsets.all(16),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
                                         color: Colors.grey[100],
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(18))),
-                                    child: Icon(
-                                      Icons.date_range,
-                                      color: Colors.lightBlue[900],
+                                          Radius.circular(18),
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.date_range,
+                                        color: Colors.lightBlue[900],
+                                      ),
+                                      padding: EdgeInsets.all(10),
                                     ),
-                                    padding: EdgeInsets.all(10),
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Expanded(
-                                    child: Column(
+                                    SizedBox(
+                                      width: 16,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            "USD | ZWL",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.grey[900]),
+                                          ),
+                                          Text(
+                                            myModels[index].source.toString(),
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.grey[500]),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.end,
                                       children: <Widget>[
                                         Text(
-                                          "USD/ZWL\$",
+                                          "\$ " +
+                                              myModels[index].rate.toString(),
                                           style: TextStyle(
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.w700,
-                                              color: Colors.grey[900]),
-                                        ),
-                                        Text(
-                                          myModels[index].source.toString(),
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.grey[500]),
+                                              color: Colors.lightGreen),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Text(
-                                        "\$ " + myModels[index].rate.toString(),
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.lightGreen),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },
@@ -296,7 +296,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                 SizedBox(height: 7),
                 Center(
                   child: new RaisedButton(
-                    color: Colors.blue[900],
+                    color: Color.fromRGBO(0, 128, 128, 1),
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -326,7 +326,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-              color: Color.fromRGBO(243, 245, 248, 1),
+              color: Color.fromRGBO(243, 235, 248, 1),
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(0), topRight: Radius.circular(0))),
           child: SingleChildScrollView(
@@ -342,7 +342,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                     animate: true,
                     animationDuration: Duration(seconds: 5),
                     behaviors: [
-                      new charts.ChartTitle('Days',
+                      new charts.ChartTitle('Months (from February)',
                           behaviorPosition: charts.BehaviorPosition.bottom,
                           titleOutsideJustification:
                               charts.OutsideJustification.middleDrawArea),
@@ -356,7 +356,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                 SizedBox(height: 7),
                 Center(
                   child: new RaisedButton(
-                    color: Colors.blue[900],
+                    color: Color.fromRGBO(0, 128, 128, 1),
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -387,7 +387,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Color.fromRGBO(0, 128, 128, 1),
           title: Text('BMMA Rates'),
           centerTitle: true,
           bottom: TabBar(

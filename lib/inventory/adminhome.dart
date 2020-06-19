@@ -33,20 +33,20 @@ class _AdminState extends State<Admin> {
           title: Row(
             children: <Widget>[
               Expanded(
-                  child: FlatButton.icon(
-                      onPressed: () {
-                        setState(() => _selectedPage = Page.dashboard);
-                      },
-                      icon: Icon(
-                        Icons.dashboard,
-                        color: _selectedPage == Page.dashboard
-                            ? active
-                            : notActive,
-                      ),
-                      label: Text(
-                        'Dashboard',
-                        style: TextStyle(color: Colors.white),
-                      ))),
+                child: FlatButton.icon(
+                  onPressed: () {
+                    setState(() => _selectedPage = Page.dashboard);
+                  },
+                  icon: Icon(
+                    Icons.dashboard,
+                    color: _selectedPage == Page.dashboard ? active : notActive,
+                  ),
+                  label: Text(
+                    'Dashboard',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
               Expanded(
                   child: FlatButton.icon(
                       onPressed: () {
@@ -149,7 +149,7 @@ class _AdminState extends State<Admin> {
             ),
             Expanded(
               child: Container(
-                margin:EdgeInsets.only(left:10.0, right:10.0),
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
                 child: GridView(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),

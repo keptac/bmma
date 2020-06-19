@@ -14,9 +14,30 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
   double _costPrice = 0.0;
   double _sellingPrice = 0.0;
   double _sellingPriceUsd = 0.0;
-  double _averageRate = 2.0;
+  double _averageRate = 83.5;
   String currency = 'ZWL';
   int _quantity = 1;
+
+  void _showResultDialog(currency, rate) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('SP Results'),
+          content: Text(
+              'Sell each item at ' + currency + ' ' + rate.toStringAsFixed(2)),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _calculateSellingPrice() {
     if (_costPriceController.text.isNotEmpty &&
@@ -26,15 +47,22 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
       if (_quantity == 0) {
         _quantity = 1;
       }
+
       _profit = double.parse(_profitController.text);
       _costPrice = double.parse(_costPriceController.text) / _quantity;
       _sellingPrice = (100 + _profit) * (_costPrice / 100);
 
-      if (currency == "ZWL") {
-        _sellingPriceUsd = _sellingPrice / _averageRate;
-      } else if (currency == "USD") {
+      if (currency == "USD") {
+        _showResultDialog(currency, _sellingPrice / _averageRate);
+        setState(() {
+          _sellingPriceUsd = _sellingPrice / _averageRate;
+        });
+      } else if (currency == "ZWL") {
         _sellingPriceUsd = _sellingPrice;
-        _sellingPrice = _sellingPriceUsd * _averageRate;
+        _showResultDialog(currency, _sellingPriceUsd * _averageRate);
+        setState(() {
+          _sellingPrice = _sellingPriceUsd * _averageRate;
+        });
       }
     } else {}
   }
@@ -56,11 +84,11 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[900],
+        backgroundColor: Color.fromRGBO(0, 158, 158, 1),
         title: Text('BMMA Calculator'),
         centerTitle: true,
       ),
-      backgroundColor: Color.fromRGBO(38, 81, 158, 1),
+      backgroundColor: Color.fromRGBO(0, 158, 158, 1),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
@@ -90,12 +118,16 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                       ),
                     ),
                     Positioned(
-                      top: 20,
+                      top: 30,
                       left: 20,
                       right: 20,
                       child: Center(
                         child: Text(
-                          'Sell at (USD $_sellingPriceUsd = ZWL $_sellingPrice) each',
+                          'Sell at USD ' +
+                              _sellingPriceUsd.toStringAsFixed(2) +
+                              ' or ZWL ' +
+                              _sellingPrice.toStringAsFixed(2) +
+                              ' each',
                           style: TextStyle(
                             fontWeight: FontWeight.w300,
                             color: Colors.white,
@@ -105,7 +137,7 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                       ),
                     ),
                     Positioned(
-                      top: 50,
+                      top: 60,
                       left: 20,
                       right: 20,
                       child: Center(
@@ -171,22 +203,24 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                 height: 15,
                               ),
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
+                                // margin: EdgeInsets.symmetric(horizontal: 10),
+
+                                child: Column(
                                   children: <Widget>[
                                     SizedBox(
                                       height: 40,
-                                      width: 70,
+                                      width: 300,
                                       child: DropdownButton<String>(
                                         value: currency,
                                         icon: Icon(Icons.arrow_downward),
                                         iconSize: 20,
                                         elevation: 16,
-                                        style:
-                                            TextStyle(color: Colors.blue[900]),
+                                        style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(0, 158, 158, 1)),
                                         underline: Container(
                                           height: 2,
-                                          color: Colors.blue[900],
+                                          color: Color.fromRGBO(0, 158, 158, 1),
                                         ),
                                         onChanged: (String newValue) {
                                           setState(() {
@@ -204,10 +238,9 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                         }).toList(),
                                       ),
                                     ),
-                                    SizedBox(width: 10.0),
+                                    SizedBox(height: 20.0),
                                     SizedBox(
-                                      height: 60,
-                                      width: 150,
+                                      width: 300,
                                       child: TextField(
                                         maxLength: 10000,
                                         controller: _costPriceController,
@@ -216,14 +249,16 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                           labelText: 'Buying Price',
                                           prefixText: '$currency ',
                                           labelStyle: TextStyle(
-                                              color: Colors.blue[900]),
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1)),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 const BorderRadius.all(
                                               const Radius.circular(5.0),
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue[900],
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1),
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -232,18 +267,16 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                               const Radius.circular(10.0),
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue[900],
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 15.0),
                                     SizedBox(
-                                      width: 10.0,
-                                    ),
-                                    SizedBox(
-                                      height: 60,
-                                      width: 130,
+                                      width: 300,
                                       child: TextField(
                                         maxLength: 5,
                                         controller: _quantityController,
@@ -251,14 +284,16 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                         decoration: InputDecoration(
                                           labelText: 'Quantity',
                                           labelStyle: TextStyle(
-                                              color: Colors.blue[900]),
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1)),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 const BorderRadius.all(
                                               const Radius.circular(5.0),
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue[900],
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1),
                                             ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
@@ -267,7 +302,8 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                               const Radius.circular(10.0),
                                             ),
                                             borderSide: BorderSide(
-                                              color: Colors.blue[900],
+                                              color: Color.fromRGBO(
+                                                  0, 158, 158, 1),
                                             ),
                                           ),
                                         ),
@@ -277,59 +313,39 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                 ),
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 15.0,
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 70,
-                                      width: 230,
-                                      child: Container(
-                                        margin:
-                                            EdgeInsets.only(left: 5, top: 20),
-                                        child: Text(
-                                          'Expected Profit :',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w300),
+                                child: SizedBox(
+                                  width: 300,
+                                  child: TextField(
+                                    maxLength: 4,
+                                    controller: _profitController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      labelText: '% Profit',
+                                      labelStyle: TextStyle(
+                                          color:
+                                              Color.fromRGBO(0, 158, 158, 1)),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: const BorderRadius.all(
+                                          const Radius.circular(5.0),
+                                        ),
+                                        borderSide: BorderSide(
+                                          color: Color.fromRGBO(0, 158, 158, 1),
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: const BorderRadius.all(
+                                          const Radius.circular(10.0),
+                                        ),
+                                        borderSide: BorderSide(
+                                          color: Color.fromRGBO(0, 158, 158, 1),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 60,
-                                      width: 140,
-                                      child: TextField(
-                                        maxLength: 4,
-                                        controller: _profitController,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          labelText: '% Profit',
-                                          labelStyle: TextStyle(
-                                              color: Colors.blue[900]),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              const Radius.circular(5.0),
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: Colors.blue[900],
-                                            ),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              const Radius.circular(10.0),
-                                            ),
-                                            borderSide: BorderSide(
-                                              color: Colors.blue[900],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 5),
@@ -345,7 +361,7 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                           left: 30,
                                           right: 30),
                                       onPressed: _calculateSellingPrice,
-                                      color: Colors.blue[900],
+                                      color: Color.fromRGBO(0, 158, 158, 1),
                                       child: Text(
                                         "Calculate",
                                         style: TextStyle(
@@ -400,9 +416,7 @@ class _ProfitCalculatorState extends State<ProfitCalculator> {
                                     padding: EdgeInsets.all(30),
                                     child: Center(
                                       child: Text(
-                                        '''Hi Sammy M
-
-I have been studying the ZWL - USD rate for you, it seems to be rising contanstly weekly at this {rate}. Since you horded using USD it would be advisable to sell your product in USD, if however you decide to sell in ZWL, you will have increase your weekly sales or review the prices weekly.''',
+                                        '''I have been studying the ZWL - USD rate for you, it seems to be rising contanstly monthly at this {s}. ncrease your weekly sales or review the prices weekly.''',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontStyle: FontStyle.italic),
@@ -414,7 +428,8 @@ I have been studying the ZWL - USD rate for you, it seems to be rising contanstl
                               Positioned(
                                 top: 0,
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.blue[900],
+                                  backgroundColor:
+                                      Color.fromRGBO(0, 158, 158, 1),
                                   radius: 35,
                                   child: Icon(
                                     Icons.info,

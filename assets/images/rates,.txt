@@ -1,0 +1,10 @@
+rates,
+
+Adjust to current rates
+Months not days
+
+Calculator
+Rate
+dialog box
+rates
+row view

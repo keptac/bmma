@@ -10,21 +10,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BMMA',
+      
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WalletApp(),
+      home: BmmaApp(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class WalletApp extends StatefulWidget {
+class BmmaApp extends StatefulWidget {
   @override
-  _WalletAppState createState() => _WalletAppState();
+  _BmmaAppState createState() => _BmmaAppState();
 }
 
-class _WalletAppState extends State<WalletApp> {
+class _BmmaAppState extends State<BmmaApp> {
   var screens = [
     HomeScreen(),
     Settings(),
@@ -36,32 +37,11 @@ class _WalletAppState extends State<WalletApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('B M M A'),
+        title: Text('B M M A', style: TextStyle(fontSize: 30.0),),
         centerTitle: true,
-        backgroundColor: Colors.blue[900],
+        backgroundColor: Color.fromRGBO(0, 128, 128, 1),
       ),
-      backgroundColor: Color.fromRGBO(38, 81, 158, 1),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedTab,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text("Account")),
-        ],
-        onTap: (index) {
-          setState(() {
-            selectedTab = index;
-          });
-        },
-        showUnselectedLabels: true,
-        iconSize: 30,
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   elevation: 0,
-      //   child: Icon(Icons.add),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+     backgroundColor: Colors.white,
       body: screens[selectedTab],
     );
   }
