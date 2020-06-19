@@ -17,20 +17,14 @@ import 'package:uuid/uuid.dart';
       'quantity': quantity,
       'price': price,
       'picture' :image
-      
-
     });
-  
    }
 
    getproduct(String cate){
-
      return _firestore.collection('products')
      .where('category',isEqualTo: cate)
      .getDocuments();
 
    }
-
-
    
  }

@@ -64,7 +64,7 @@ class _AdminState extends State<Admin> {
             ],
           ),
           elevation: 0.0,
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Color.fromRGBO(0, 128, 128, 1),
         ),
         body: _loadScreen());
   }
@@ -92,7 +92,7 @@ class _AdminState extends State<Admin> {
                             begin: Alignment.topRight,
                             end: Alignment.bottomLeft,
                             colors: [
-                              Color.fromRGBO(0, 0, 50, 0.9),
+                              Color.fromRGBO(0, 128, 128, 0.9),
                               Color.fromRGBO(0, 0, 50, 0.7),
                             ]),
                       ),
@@ -112,21 +112,7 @@ class _AdminState extends State<Admin> {
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 50,
-                      left: 20,
-                      right: 20,
-                      child: Center(
-                        child: Text(
-                          'Revenue Sells: \$ $_sellsValue',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
+
                     Positioned(
                       left: 15,
                       bottom: 10,

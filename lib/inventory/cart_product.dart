@@ -100,7 +100,7 @@ class _Single_cart_productState extends State<Single_cart_product> {
               Expanded(
                 child: ListTile(
                   title: Text("Total"),
-                  subtitle: Text("₹230"),
+                  subtitle: Text("\$230"),
                 )
               ),
               Expanded(

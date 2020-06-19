@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 enum Page { Camera, Gallery }
 
-
 class HomeMaterial extends StatefulWidget {
   @override
   _HomeMaterialState createState() => _HomeMaterialState();
@@ -178,6 +177,7 @@ class _HomeMaterialState extends State {
                         },
                       )
                   ),
+                  SizedBox(height: 25,),
                   Row(
                     children: <Widget>[ 
                       Padding(
